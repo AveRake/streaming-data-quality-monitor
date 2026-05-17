@@ -5,6 +5,7 @@ WITH raw_data AS (
         raw_json->'metadata'->>'tx_id' AS transaction_id,
         CAST(raw_json->'metadata'->>'timestamp' AS TIMESTAMP) AS created_at,
         raw_json->'metadata'->>'source_system' AS source_system,
+        CAST(raw_json->'metadata'->>'ml_risk_score' AS DECIMAL(5,2)) AS ml_risk_score,
         CAST(raw_json->'payload'->>'user_id' AS INTEGER) AS user_id,
         CAST(raw_json->'payload'->'financial'->>'amount' AS DECIMAL(15, 2)) AS amount,
         raw_json->'payload'->'financial'->>'currency' AS currency,

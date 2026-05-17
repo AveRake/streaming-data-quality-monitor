@@ -4,3 +4,4 @@ bronze_transactions,amount,less_than,1000000,WARNING: Suspiciously Huge Amount (
 bronze_transactions,currency,in_list,"'RUB', 'USD', 'EUR', 'KZT'",ERROR: Invalid Currency Code
 bronze_transactions,raw_ip_address,not_null,,ERROR: Missing IP Address
 bronze_transactions,user_id,between,"1000, 99999",ERROR: Invalid User ID Format
+bronze_transactions,ml_risk_score,less_than,70.0,AI ALERT: Uncharacteristic user behavior detected by ML
