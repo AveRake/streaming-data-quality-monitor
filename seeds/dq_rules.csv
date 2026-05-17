@@ -1,0 +1,6 @@
+table_name,column_name,rule_type,rule_value,error_message
+bronze_transactions,amount,greater_than,0,CRITICAL: Negative or Zero Amount
+bronze_transactions,amount,less_than,1000000,WARNING: Suspiciously Huge Amount (Fraud)
+bronze_transactions,currency,in_list,"'RUB', 'USD', 'EUR', 'KZT'",ERROR: Invalid Currency Code
+bronze_transactions,raw_ip_address,not_null,,ERROR: Missing IP Address
+bronze_transactions,user_id,between,"1000, 99999",ERROR: Invalid User ID Format
