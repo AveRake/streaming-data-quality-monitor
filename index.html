@@ -56,6 +56,49 @@
         <div class="tab-content" id="pills-tabContent">
             <!-- ВКЛАДКА 1: ГЛАВНАЯ -->
             <div class="tab-pane fade show active" id="pills-dashboard">
+                <!-- НОВЫЙ БЛОК: Data Quality Index (DQI) -->
+                <div class="card shadow-sm border-0 mb-4" style="background: linear-gradient(145deg, #161625 0%, #1a1a2e 100%); border: 1px solid #2d2d44 !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-white mb-0">Индекс качества данных (DQI)</h5>
+                            <span class="badge bg-secondary">DAMA-DMBOK Standard</span>
+                        </div>
+                        <div class="row text-center align-items-center">
+                            <div class="col-md-3 border-end border-secondary">
+                                <h6 class="text-muted text-uppercase small fw-bold">Overall Score</h6>
+                                <h1 class="display-5 fw-bold text-glow-info mb-0" id="dqi-main">0%</h1>
+                            </div>
+                            <div class="col-md-3 text-start ps-4">
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted text-uppercase fw-bold">Completeness (Полнота)</small>
+                                    <small class="text-white fw-bold" id="val-completeness">0%</small>
+                                </div>
+                                <div class="progress mt-2" style="height: 8px; background-color: #2b2b2b;">
+                                    <div id="bar-completeness" class="progress-bar bg-primary" role="progressbar" style="width: 0%; transition: width 1s ease-in-out;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-start ps-4">
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted text-uppercase fw-bold">Validity (Корректность)</small>
+                                    <small class="text-white fw-bold" id="val-validity">0%</small>
+                                </div>
+                                <div class="progress mt-2" style="height: 8px; background-color: #2b2b2b;">
+                                    <div id="bar-validity" class="progress-bar bg-success" role="progressbar" style="width: 0%; transition: width 1s ease-in-out;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-start ps-4">
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted text-uppercase fw-bold">Timeliness (Своевр-ть)</small>
+                                    <small class="text-white fw-bold" id="val-timeliness">0%</small>
+                                </div>
+                                <div class="progress mt-2" style="height: 8px; background-color: #2b2b2b;">
+                                    <div id="bar-timeliness" class="progress-bar bg-warning" role="progressbar" style="width: 0%; transition: width 1s ease-in-out;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- КОНЕЦ НОВОГО БЛОКА DQI -->
                 <div class="row mb-4 g-3">
                     <div class="col-md-4">
                         <div class="card shadow-sm h-100 p-2">
@@ -280,8 +323,44 @@
             } catch (error) { console.error('Ошибка графика:', error); }
         }
 
+        async function fetchDQI() {
+            try {
+                const response = await fetch('/api/dqi');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // Анимируем главную цифру DQI
+                    document.getElementById('dqi-main').innerText = data.dqi + '%';
+
+                    // Обновляем ширину полосок и текст
+                    document.getElementById('bar-completeness').style.width = data.completeness + '%';
+                    document.getElementById('val-completeness').innerText = data.completeness + '%';
+
+                    document.getElementById('bar-validity').style.width = data.validity + '%';
+                    document.getElementById('val-validity').innerText = data.validity + '%';
+
+                    document.getElementById('bar-timeliness').style.width = data.timeliness + '%';
+                    document.getElementById('val-timeliness').innerText = data.timeliness + '%';
+                    
+                    // Меняем цвет главного DQI в зависимости от качества (светофор)
+                    const dqiEl = document.getElementById('dqi-main');
+                    if (data.dqi >= 90) {
+                        dqiEl.className = 'display-5 fw-bold text-glow-success mb-0';
+                    } else if (data.dqi >= 70) {
+                        dqiEl.className = 'display-5 fw-bold text-glow-info mb-0';
+                    } else {
+                        dqiEl.className = 'display-5 fw-bold text-glow-danger mb-0';
+                    }
+                }
+            } catch (error) { console.error('Ошибка DQI:', error); }
+        }
+
         fetchAlerts();
-        setInterval(fetchAlerts, 5000);
+        fetchDQI();
+        setInterval(() => {
+            fetchAlerts();
+            fetchDQI(); ы
+        }, 5000);
     </script>
 </body>
 </html>

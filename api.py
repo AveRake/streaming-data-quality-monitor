@@ -58,3 +58,25 @@ def get_chart_data():
         return {"labels": [], "values": []}
     finally:
         conn.close()
+
+@app.get("/api/dqi")
+def get_dqi_metrics():
+    """Эндпоинт для получения Data Quality Index по стандарту DAMA-DMBOK"""
+    conn = psycopg2.connect(**DB_PARAMS)
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT completeness, validity, timeliness, dqi_score FROM gold_dq_metrics;")
+        row = cur.fetchone()
+        if row:
+            return {
+                "status": "success",
+                "completeness": float(row[0]),
+                "validity": float(row[1]),
+                "timeliness": float(row[2]),
+                "dqi": float(row[3])
+            }
+        return {"status": "error", "message": "Нет данных"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    finally:
+        conn.close()

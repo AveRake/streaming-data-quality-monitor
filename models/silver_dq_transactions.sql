@@ -9,6 +9,8 @@ dq_rules AS (
         {{ mask_ip('raw_ip_address') }} AS masked_ip,
         device_type,
         raw_ip_address,
+        loaded_at,
+        ml_risk_score,
 
         {{ apply_dq_rules('bronze_transactions') }} AS dq_status,
 
