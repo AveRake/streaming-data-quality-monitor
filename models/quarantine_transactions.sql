@@ -1,0 +1,1 @@
+SELECT *, dq_status AS error_reason FROM {{ ref('silver_dq_transactions') }} WHERE dq_status != 'Valid'

@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# dbt
+target/
+dbt_packages/
+logs/
+
+# IDE
+.vscode/
+.user.yml
+
+# OS
+.DS_Store

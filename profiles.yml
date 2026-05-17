@@ -1,0 +1,12 @@
+vkr_profile:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      user: vkr_user
+      password: vkr_password
+      port: 5432
+      dbname: vkr_db
+      schema: public
+      threads: 1

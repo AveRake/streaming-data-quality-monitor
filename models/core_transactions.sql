@@ -1,0 +1,1 @@
+SELECT * FROM {{ ref('silver_dq_transactions') }} WHERE dq_status = 'Valid'

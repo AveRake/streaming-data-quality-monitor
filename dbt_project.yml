@@ -1,0 +1,11 @@
+name: 'vkr_project'
+version: '1.0.0'
+config-version: 2
+profile: 'vkr_profile'
+
+model-paths: ["models"]
+
+models:
+  vkr_project:
+    # По умолчанию создаем таблицы в базе (а не view)
+    +materialized: table
